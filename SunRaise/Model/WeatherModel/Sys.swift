@@ -7,3 +7,8 @@
 //
 
 import Foundation
+
+struct Sys: Codable {
+    let sunrise: Date
+    let sunset: Date
+}

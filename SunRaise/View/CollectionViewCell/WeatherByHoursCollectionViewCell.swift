@@ -14,7 +14,6 @@ class WeatherByHoursCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var rainProbabilityLabel: UILabel!
     @IBOutlet weak var tempretureLabel: UILabel!
     @IBOutlet weak var iconWeather: UIImageView!
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

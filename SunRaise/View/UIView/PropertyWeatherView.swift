@@ -10,12 +10,28 @@ import UIKit
 
 class PropertyWeatherView: UIView {
 
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
+    @IBOutlet weak var timeWhenSunriseLabel: UILabel!
+    @IBOutlet weak var rainProbabilityLabel: UILabel!
+    @IBOutlet weak var windSpeedLabel: UILabel!
+    @IBOutlet weak var precipitationValueLabel: UILabel!
+    @IBOutlet weak var distanceVisibilityLabel: UILabel!
+    class func instantiateFromNib() -> PropertyWeatherView {
+        guard let nib = UINib(
+        nibName: "PropertyWeatherView",
+        bundle: Bundle.main).instantiate(
+            withOwner: nil,
+            options: nil).first as? PropertyWeatherView else {return PropertyWeatherView()}
+        return nib
     }
-    */
-
+    func set(_ sunraise: String,
+             rainProbability: String,
+             _ windSpeed: String,
+             _ precipValue: String,
+             distanceValue: String) {
+        timeWhenSunriseLabel.text = sunraise
+        rainProbabilityLabel.text = rainProbability
+        windSpeedLabel.text = windSpeed
+        precipitationValueLabel.text = precipValue
+        distanceVisibilityLabel.text = distanceValue
+    }
 }

@@ -8,8 +8,10 @@
 
 import Foundation
 
-class WeatherData{
+class WeatherData {
+    // swiftlint:disable all
     var dt: Date?
+    // swiftlint:enable all
     var cityName: String?
     var mainDiscr: String?
     var fullDescription: String?
@@ -22,8 +24,7 @@ class WeatherData{
     var sunrise: Date
     var sunset: Date
     var clouds: Int?
-    
-    
+
     init?(
         cityName: String,
         mainDiscr: String,
@@ -37,7 +38,7 @@ class WeatherData{
         sunrise: Date,
         sunset: Date,
         clouds: Int
-        ){
+        ) {
         self.cityName = cityName
         self.mainDiscr = mainDiscr
         self.fullDescription = fullDescription
@@ -53,7 +54,7 @@ class WeatherData{
     }
 }
 
-class DailyWeatherData{
+class DailyWeatherData {
     var hourly: [Hourly]?
     var daily: [Daily]?
 }

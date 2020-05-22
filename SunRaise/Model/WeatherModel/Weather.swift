@@ -7,3 +7,11 @@
 //
 
 import Foundation
+// swiftlint:disable all
+struct Weather: Codable {
+    let description: String
+    let id: Int
+    let main: String
+    let icon: String
+}
+// swiftlint:enable all

@@ -7,3 +7,11 @@
 //
 
 import Foundation
+// swiftlint:disable all
+struct Hourly: Codable {
+    var dt: Date?
+    var temp: Double?
+    var weather: [Weather]
+    var rain: Rain?
+}
+// swiftlint:enable all

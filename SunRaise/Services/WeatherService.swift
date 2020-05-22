@@ -5,22 +5,19 @@
 //  Created by Dmitry Semenuk on 12/05/2020.
 //  Copyright © 2020 Dmitry Semenuk. All rights reserved.
 //
+import Foundation
+import CoreLocation
 
 protocol WeatherManagerDelegate: AnyObject {
     func getWeather(weather: WeatherData)
     func getDailyWeather(dailyWeather: DailyWeatherData)
 }
 
-import Foundation
-import CoreLocation
-
 struct WeatherManager {
     let weatherURL: String = "https://api.openweathermap.org/data/2.5/weather?appid=22b9e2940a9d8aa928e03d767d262547&units=metric"
     let dailyWeather: String = "https://api.openweathermap.org/data/2.5/onecall?appid=22b9e2940a9d8aa928e03d767d262547&units=metric"
-    var delegate: WeatherManagerDelegate?
-    
-    
-    //MARK: - FetchCurrentWeather
+    weak var delegate: WeatherManagerDelegate?
+    // MARK: - FetchCurrentWeather
     func fetchWeather(lat: CLLocationDegrees, lon: CLLocationDegrees) {
         let localizing = NSLocalizedString("backdend_localization", comment: "")
         let urlString = "\(weatherURL)&lat=\(lat)&lon=\(lon)&lang=\(localizing)"
@@ -28,11 +25,10 @@ struct WeatherManager {
         performRequest(with: urlString)
         performHourlyDailyRequest(with: dailyWeatherURL)
     }
-    
     func performRequest(with urlString: String) {
         if let url = URL(string: urlString) {
             let session = URLSession(configuration: .default)
-            let task = session.dataTask(with: url) { (data, response, error) in
+            let task = session.dataTask(with: url) { (data, _, error) in
                 if error != nil {
                     print("Error")
                 }
@@ -45,7 +41,6 @@ struct WeatherManager {
             task.resume()
         }
     }
-    
     func parseJSON(_ weatherData: Data) -> WeatherData? {
         let decoder = JSONDecoder()
         do {
@@ -66,22 +61,30 @@ struct WeatherManager {
             )
             weather?.dt = decodedData.dt
             return weather
-            
         } catch {
-            return WeatherData(cityName: "Empty", mainDiscr: "empty", fullDescription: "empty", tem: 0, maxTemp: 0, minTemp: 0, visibility: 0, pressure: 0, humidity: 0, sunrise: Date(), sunset: Date(), clouds: 0)
+            return WeatherData(cityName: "Empty",
+                               mainDiscr: "empty",
+                               fullDescription: "empty",
+                               tem: 0,
+                               maxTemp: 0,
+                               minTemp: 0,
+                               visibility: 0,
+                               pressure: 0,
+                               humidity: 0,
+                               sunrise: Date(),
+                               sunset: Date(),
+                               clouds: 0)
         }
     }
-    
-    //MARK: - FetchDailyAndHourlyweather
+    // MARK: - FetchDailyAndHourlyweather
     func fetchHourlyDailyWeather(lat: CLLocationDegrees, lon: CLLocationDegrees) {
         let urlString = "\(weatherURL)&lat=\(lat)&lon=\(lon)"
         performHourlyDailyRequest(with: urlString)
     }
-    
     func performHourlyDailyRequest(with urlString: String) {
         if let url = URL(string: urlString) {
             let session = URLSession(configuration: .default)
-            let task = session.dataTask(with: url) { (data, response, error) in
+            let task = session.dataTask(with: url) { (data, _, error) in
                 if error != nil {
                     print("Error")
                 }
@@ -94,20 +97,16 @@ struct WeatherManager {
             task.resume()
         }
     }
-    
     func parseDailyJSON(_ weatherData: Data) -> DailyWeatherData? {
         let decoder = JSONDecoder()
         do {
             let decodedData = try decoder.decode(HourlyAndDailyModel.self, from: weatherData)
-            
             let dailyWeather = DailyWeatherData()
             dailyWeather.daily = decodedData.daily
             dailyWeather.hourly = decodedData.hourly
             return dailyWeather
-            
         } catch {
             return DailyWeatherData()
         }
     }
-    
 }

@@ -10,12 +10,17 @@ import UIKit
 
 class FullDescriptionWeatherView: UIView {
 
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
+    @IBOutlet weak var fullDescriptionWeatherLabel: UILabel!
+    class func instantiateFromNib() -> FullDescriptionWeatherView {
+        guard let nib = UINib(
+            nibName: "FullDescriptionWeatherView",
+            bundle: Bundle.main).instantiate(
+                withOwner: nil,
+                options: nil).first as? FullDescriptionWeatherView else {return FullDescriptionWeatherView()}
+        return nib
     }
-    */
+    func set(_ fullDescription: String) {
+        fullDescriptionWeatherLabel.text = fullDescription
+    }
 
 }

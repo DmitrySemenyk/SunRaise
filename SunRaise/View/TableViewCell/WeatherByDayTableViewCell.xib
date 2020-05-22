@@ -25,7 +25,7 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Cloudy &amp; Foggy" translatesAutoresizingMaskIntoConstraints="NO" id="Te5-eO-LHw">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Te5-eO-LHw">
                                 <rect key="frame" x="150" y="0.0" width="80" height="80"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Te5-eO-LHw" secondAttribute="height" multiplier="1:1" id="9J0-a5-n6w"/>
@@ -81,7 +81,4 @@
             <point key="canvasLocation" x="140.57971014492756" y="156.69642857142856"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <image name="Cloudy &amp; Foggy" width="40" height="36"/>
-    </resources>
 </document>

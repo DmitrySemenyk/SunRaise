@@ -7,3 +7,9 @@
 //
 
 import Foundation
+
+struct Temp: Codable {
+    var max: Double?
+    var min: Double?
+    //var weather: [Weather]?
+}

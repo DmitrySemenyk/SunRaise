@@ -7,3 +7,11 @@
 //
 
 import Foundation
+
+struct  Constant {
+    static let numberOfDays: Int = 7
+    static let rowHeight: Int = 40
+    static let cellCollectionReuseIdentifier = "WeatherByHoursCollectionViewCell"
+    static let cellSunRaiseCollectionReuseIdentifier = "SunRaiseCollectionViewCell"
+    static let cellTableReuseIdentifier = "WeatherByDayTableViewCell"
+}
