@@ -1,0 +1,54 @@
+
+/* Class = "UILabel"; text = "description"; ObjectID = "4Ft-Ag-xOZ"; */
+"4Ft-Ag-xOZ.text" = "description";
+
+/* Class = "UILabel"; text = "nT"; ObjectID = "4bz-Gi-jnm"; */
+"4bz-Gi-jnm.text" = "nT";
+
+/* Class = "UILabel"; text = "CHANCE TO RAIN"; ObjectID = "4fm-ws-ntV"; */
+"4fm-ws-ntV.text" = "CHANCE TO RAIN";
+
+/* Class = "UILabel"; text = "dT"; ObjectID = "5N5-TJ-HU7"; */
+"5N5-TJ-HU7.text" = "dT";
+
+/* Class = "UILabel"; text = "TODAY"; ObjectID = "F9t-42-k1u"; */
+"F9t-42-k1u.text" = "TODAY";
+
+/* Class = "UILabel"; text = "VISIBILITY"; ObjectID = "G6s-FM-JuL"; */
+"G6s-FM-JuL.text" = "VISIBILITY";
+
+/* Class = "UILabel"; text = "CityName"; ObjectID = "GaU-5r-sqq"; */
+"GaU-5r-sqq.text" = "CityName";
+
+/* Class = "UILabel"; text = "WIND"; ObjectID = "LWO-AQ-Up4"; */
+"LWO-AQ-Up4.text" = "WIND";
+
+/* Class = "UILabel"; text = "SUNRISE"; ObjectID = "MJg-6V-Mp6"; */
+"MJg-6V-Mp6.text" = "SUNRISE";
+
+/* Class = "UILabel"; text = "Full Description"; ObjectID = "NX8-tm-z4u"; */
+"NX8-tm-z4u.text" = "Full Description";
+
+/* Class = "UILabel"; text = "timeSunrise"; ObjectID = "OlG-dX-2pb"; */
+"OlG-dX-2pb.text" = "timeSunrise";
+
+/* Class = "UILabel"; text = "distanceVisibility"; ObjectID = "POq-ZH-wQj"; */
+"POq-ZH-wQj.text" = "distanceVisibility";
+
+/* Class = "UILabel"; text = "rainProbabilty"; ObjectID = "Tg6-61-ll3"; */
+"Tg6-61-ll3.text" = "rainProbabilty";
+
+/* Class = "UILabel"; text = "PRECIPITATION"; ObjectID = "b1h-5Y-KM8"; */
+"b1h-5Y-KM8.text" = "PRECIPITATION";
+
+/* Class = "UILabel"; text = "Day"; ObjectID = "c9d-PF-XFU"; */
+"c9d-PF-XFU.text" = "Day";
+
+/* Class = "UILabel"; text = "windSpeed"; ObjectID = "mVv-Wq-uSK"; */
+"mVv-Wq-uSK.text" = "windSpeed";
+
+/* Class = "UILabel"; text = "precipValue"; ObjectID = "o7W-cb-GVv"; */
+"o7W-cb-GVv.text" = "precipValue";
+
+/* Class = "UILabel"; text = "Tempreture"; ObjectID = "xMN-zh-Seg"; */
+"xMN-zh-Seg.text" = "Tempreture";

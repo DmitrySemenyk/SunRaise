@@ -22,10 +22,9 @@ struct WeatherManager {
     
     //MARK: - FetchCurrentWeather
     func fetchWeather(lat: CLLocationDegrees, lon: CLLocationDegrees) {
-        let urlString = "\(weatherURL)&lat=\(lat)&lon=\(lon)"
+        let localizing = NSLocalizedString("backdend_localization", comment: "")
+        let urlString = "\(weatherURL)&lat=\(lat)&lon=\(lon)&lang=\(localizing)"
         let dailyWeatherURL = "\(dailyWeather)&lat=\(lat)&lon=\(lon)"
-    
-        print(dailyWeatherURL)
         performRequest(with: urlString)
         performHourlyDailyRequest(with: dailyWeatherURL)
     }
