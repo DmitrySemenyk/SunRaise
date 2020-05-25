@@ -21,37 +21,9 @@ class WeatherData {
     var visibility: Int?
     var pressure: Int?
     var humidity: Int?
-    var sunrise: Date
-    var sunset: Date
+    var sunrise: Date?
+    var sunset: Date?
     var clouds: Int?
-
-    init?(
-        cityName: String,
-        mainDiscr: String,
-        fullDescription: String,
-        tem: Double,
-        maxTemp: Double,
-        minTemp: Double,
-        visibility: Int,
-        pressure: Int,
-        humidity: Int,
-        sunrise: Date,
-        sunset: Date,
-        clouds: Int
-        ) {
-        self.cityName = cityName
-        self.mainDiscr = mainDiscr
-        self.fullDescription = fullDescription
-        self.tempreture = Int(tem)
-        self.maxTempreture = Int(maxTemp)
-        self.minTempreture = Int(minTemp)
-        self.visibility = visibility
-        self.pressure = pressure
-        self.humidity = humidity
-        self.sunrise = sunrise
-        self.sunset = sunset
-        self.clouds = clouds
-    }
 }
 
 class DailyWeatherData {

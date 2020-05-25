@@ -16,8 +16,7 @@ class MainViewController: UIViewController,
                             UITableViewDelegate,
                             UITableViewDataSource,
                             CLLocationManagerDelegate,
-                            UIScrollViewDelegate,
-                            WeatherManagerDelegate {
+                            UIScrollViewDelegate {
     @IBOutlet weak var bgImageView: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
@@ -31,10 +30,9 @@ class MainViewController: UIViewController,
     let nibFullDescriptionWeatherView = FullDescriptionWeatherView.instantiateFromNib()
     let nibPropertyisWeatherView = PropertyWeatherView.instantiateFromNib()
     let locationManager = CLLocationManager()
-    var weather: WeatherData?
-    var weatherManager = WeatherManager()
-    var dayName: [String] = []
+    var weather = WeatherData()
     var dailyWeather = DailyWeatherData()
+    var dayName: [String] = []
     var loadingView = UIView()
     var scrollViewOffset: CGFloat = 0
     // MARK: - Life
@@ -83,7 +81,7 @@ class MainViewController: UIViewController,
         locationManager.requestLocation()
     }
     private func setWeatherManager() {
-        weatherManager.delegate = self
+        //weatherManager.delegate = self
     }
     private func setCollectionView() {
         weaherByHoursCollectionView.delegate = self
@@ -99,9 +97,56 @@ class MainViewController: UIViewController,
     // MARK: - LocationManager
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
-            let lat = location.coordinate.latitude
-            let lon = location.coordinate.longitude
-            weatherManager.fetchWeather(lat: lat, lon: lon)
+            let lat: String = "\(location.coordinate.latitude)"
+            let lon: String = "\(location.coordinate.longitude)"
+            WeatherService.sharedInstance.getDailyJSON(lat: lat, lon: lon) { (data) in
+                self.setWeatherData(data)
+            }
+            WeatherService.sharedInstance.getHourlyJSON(lat: lat, lon: lon) { (data) in
+                self.setDailyWeather(data)
+            }
+        }
+    }
+    func setWeatherData(_ data: WeatherModel) {
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "HH:mm"
+        self.weather.cityName = data.name
+        self.weather.dt = data.dt
+        self.weather.tempreture = Int(data.main.temp)
+        self.weather.maxTempreture = Int(data.main.temp_max)
+        self.weather.sunrise = data.sys.sunrise
+        self.weather.sunset = data.sys.sunset
+        self.weather.minTempreture = Int(data.main.temp_min)
+        self.weather.pressure = data.main.pressure
+        self.weather.humidity = data.main.humidity
+        self.weather.mainDiscr = data.weather[0].main
+        self.weather.fullDescription = data.weather[0].description
+        self.weather.visibility = data.visibility
+        DispatchQueue.main.async {
+            print(self.weather.cityName)
+            self.nibMainWeatherView.set(
+                self.weather.cityName ?? "",
+                self.weather.mainDiscr ?? "",
+                "\(Int?(self.weather.tempreture!) ?? 0)˚",
+                "\(self.weather.minTempreture ?? 0)˚",
+                "\(self.weather.maxTempreture ?? 0)˚")
+            self.nibFullDescriptionWeatherView.set(
+                self.weather.fullDescription ?? "")
+            self.nibPropertyisWeatherView.set(
+                dateFormater.string(from: self.weather.sunrise ?? Date()),
+                rainProbability: "0%",
+                "\(self.weather.clouds ?? 0)",
+                "\(self.weather.pressure ?? 0)",
+                distanceValue: "\(self.weather.visibility ?? 0)")
+        }
+    }
+    func setDailyWeather(_ data: HourlyAndDailyModel){
+        dailyWeather.hourly = data.hourly
+        dailyWeather.daily = data.daily
+        DispatchQueue.main.async {
+            self.weatherByDayTableView.reloadData()
+            self.weaherByHoursCollectionView.reloadData()
+            self.loadingView.animate(isHidden: true)
         }
     }
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -116,6 +161,7 @@ class MainViewController: UIViewController,
         }
         return 0
     }
+    //swiftlint:disable all
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
@@ -150,18 +196,18 @@ class MainViewController: UIViewController,
             if (dailyWeather.hourly?.indices.contains(indexPath.item+1)) ?? false {
                 if dateFormater.string(
                     from: (dailyWeather.hourly?[indexPath.item].dt!)!) == dateFormater.string(
-                        from: (weather?.sunrise)!) && dateFormater.string(
+                        from: (weather.sunrise)!) && dateFormater.string(
                             from: (dailyWeather.hourly?[indexPath.item+1].dt!)!) > dateFormater.string(
-                                from: (weather?.sunrise)!) {
-                    sunCell.timeLabel.text = dateFormaterWithMinutes.string(from: (weather?.sunrise)!)
+                                from: (weather.sunrise)!) {
+                    sunCell.timeLabel.text = dateFormaterWithMinutes.string(from: (weather.sunrise)!)
                     sunCell.iconImageView.image = UIImage(named: "sunraise")
                     return sunCell
                 } else if dateFormater.string(
                     from: (dailyWeather.hourly?[indexPath.item].dt!)!) <= dateFormater.string(
-                        from: (weather?.sunset)!) && dateFormater.string(
+                        from: (weather.sunset)!) && dateFormater.string(
                             from: (dailyWeather.hourly?[indexPath.item+1].dt!)!) > dateFormater.string(
-                                from: (weather?.sunset)!) {
-                    sunCell.timeLabel.text = dateFormaterWithMinutes.string(from: (weather?.sunset)!)
+                                from: (weather.sunset)!) {
+                    sunCell.timeLabel.text = dateFormaterWithMinutes.string(from: (weather.sunset)!)
                     sunCell.iconImageView.image = UIImage(named: "sunset")
                     return sunCell
                 }
@@ -183,6 +229,7 @@ class MainViewController: UIViewController,
         }
         return cell
     }
+    //swiftlint:enable all
     func collectionView (
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -222,34 +269,5 @@ class MainViewController: UIViewController,
     func setScrollView() {
         scrollView.delegate = self
     }
-    // MARK: - WeatherManagerDelegate
-    func getWeather(weather: WeatherData) {
-        let dateFormater = DateFormatter()
-        dateFormater.dateFormat = "HH:mm"
-        self.weather = weather
-        DispatchQueue.main.async {
-            self.nibMainWeatherView.set(
-                weather.cityName ?? "",
-                weather.mainDiscr ?? "",
-                "\(Int?(weather.tempreture!) ?? 0)˚",
-                "\(weather.minTempreture ?? 0)˚",
-                "\(weather.maxTempreture ?? 0)˚")
-            self.nibFullDescriptionWeatherView.set(
-                weather.fullDescription ?? "")
-            self.nibPropertyisWeatherView.set(
-                dateFormater.string(from: weather.sunrise),
-                rainProbability: "0%",
-                "\(weather.clouds ?? 0)",
-                "\(weather.pressure ?? 0)",
-                distanceValue: "\(weather.visibility ?? 0)")
-        }
-    }
-    func getDailyWeather(dailyWeather: DailyWeatherData) {
-        DispatchQueue.main.async {
-            self.dailyWeather = dailyWeather
-            self.weatherByDayTableView.reloadData()
-            self.weaherByHoursCollectionView.reloadData()
-            self.loadingView.animate(isHidden: true)
-        }
-    }
+    
 }
