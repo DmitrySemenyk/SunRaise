@@ -123,7 +123,6 @@ class MainViewController: UIViewController,
         self.weather.fullDescription = data.weather[0].description
         self.weather.visibility = data.visibility
         DispatchQueue.main.async {
-            print(self.weather.cityName)
             self.nibMainWeatherView.set(
                 self.weather.cityName ?? "",
                 self.weather.mainDiscr ?? "",
@@ -140,7 +139,7 @@ class MainViewController: UIViewController,
                 distanceValue: "\(self.weather.visibility ?? 0)")
         }
     }
-    func setDailyWeather(_ data: HourlyAndDailyModel){
+    func setDailyWeather( _ data: HourlyAndDailyModel) {
         dailyWeather.hourly = data.hourly
         dailyWeather.daily = data.daily
         DispatchQueue.main.async {
@@ -269,5 +268,4 @@ class MainViewController: UIViewController,
     func setScrollView() {
         scrollView.delegate = self
     }
-    
 }
