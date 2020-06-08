@@ -68,7 +68,6 @@ class MainViewController: UIViewController,
         weatherByHoursView.addBottomLine(color: .white, height: 1)
         propertiesWeatherView.addBottomLine(color: .white, height: 1)
         weatherByDayTableView.addBottomLine(color: .white, height: 1)
-        setWeatherManager()
         setLocationManager()
         setCollectionView()
         setTableView()
@@ -79,9 +78,6 @@ class MainViewController: UIViewController,
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
-    }
-    private func setWeatherManager() {
-        //weatherManager.delegate = self
     }
     private func setCollectionView() {
         weaherByHoursCollectionView.delegate = self
@@ -99,12 +95,41 @@ class MainViewController: UIViewController,
         if let location = locations.last {
             let lat: String = "\(location.coordinate.latitude)"
             let lon: String = "\(location.coordinate.longitude)"
-            WeatherService.sharedInstance.getDailyJSON(lat: lat, lon: lon) { (data) in
-                self.setWeatherData(data)
-            }
-            WeatherService.sharedInstance.getHourlyJSON(lat: lat, lon: lon) { (data) in
-                self.setDailyWeather(data)
-            }
+
+            WeatherService.sharedInstance.getDailyJSON(lat: lat, lon: lon, completion: { (res) in
+                switch res {
+                case .success(let data):
+                    self.setWeatherData(data)
+                case .failure(let err):
+                    self.setErrorView()
+                    print(err)
+                }
+            })
+            WeatherService.sharedInstance.getHourlyJSON(lat: lat, lon: lon, completion: { (res) in
+                switch res {
+                case .success(let data):
+                    self.setDailyWeather(data)
+                case .failure(let err):
+                    self.setErrorView()
+                    print(err)
+                }
+            })
+        }
+    }
+    func setErrorView() {
+        print("here")
+        DispatchQueue.main.async {
+            let errorView = UIView(frame: CGRect(x: 0,
+                                                 y: 0,
+                                                 width: self.view.frame.size.width,
+                                                 height: self.view.frame.size.height))
+            errorView.backgroundColor = .white
+            let imageView = UIImageView()
+            imageView.frame = errorView.bounds
+            imageView.image = UIImage(named: "nointernet")
+            imageView.contentMode = .scaleAspectFit
+            errorView.addSubview(imageView)
+            self.view.addSubview(errorView)
         }
     }
     func setWeatherData(_ data: WeatherModel) {
@@ -193,23 +218,23 @@ class MainViewController: UIViewController,
             }
         } else {
             if (dailyWeather.hourly?.indices.contains(indexPath.item+1)) ?? false {
-                if dateFormater.string(
-                    from: (dailyWeather.hourly?[indexPath.item].dt!)!) == dateFormater.string(
-                        from: (weather.sunrise)!) && dateFormater.string(
-                            from: (dailyWeather.hourly?[indexPath.item+1].dt!)!) > dateFormater.string(
-                                from: (weather.sunrise)!) {
-                    sunCell.timeLabel.text = dateFormaterWithMinutes.string(from: (weather.sunrise)!)
-                    sunCell.iconImageView.image = UIImage(named: "sunraise")
-                    return sunCell
-                } else if dateFormater.string(
-                    from: (dailyWeather.hourly?[indexPath.item].dt!)!) <= dateFormater.string(
-                        from: (weather.sunset)!) && dateFormater.string(
-                            from: (dailyWeather.hourly?[indexPath.item+1].dt!)!) > dateFormater.string(
-                                from: (weather.sunset)!) {
-                    sunCell.timeLabel.text = dateFormaterWithMinutes.string(from: (weather.sunset)!)
-                    sunCell.iconImageView.image = UIImage(named: "sunset")
-                    return sunCell
-                }
+//                if dateFormater.string(
+//                    from: (dailyWeather.hourly?[indexPath.item].dt!)!) == dateFormater.string(
+//                        from: (weather.sunrise)!) && dateFormater.string(
+//                            from: (dailyWeather.hourly?[indexPath.item+1].dt!)!) > dateFormater.string(
+//                                from: (weather.sunrise)!) {
+//                    sunCell.timeLabel.text = dateFormaterWithMinutes.string(from: (weather.sunrise)!)
+//                    sunCell.iconImageView.image = UIImage(named: "sunraise")
+//                    return sunCell
+//                } else if dateFormater.string(
+//                    from: (dailyWeather.hourly?[indexPath.item].dt!)!) <= dateFormater.string(
+//                        from: (weather.sunset)!) && dateFormater.string(
+//                            from: (dailyWeather.hourly?[indexPath.item+1].dt!)!) > dateFormater.string(
+//                                from: (weather.sunset)!) {
+//                    sunCell.timeLabel.text = dateFormaterWithMinutes.string(from: (weather.sunset)!)
+//                    sunCell.iconImageView.image = UIImage(named: "sunset")
+//                    return sunCell
+//                }
             }
         }
         if let hourWeather = dailyWeather.hourly {
