@@ -15,7 +15,7 @@ struct WeatherService {
     static let sharedInstance = WeatherService()
     func getDailyJSON(lat: String, lon: String, completion: LoadSuccesfullWeather?) {
         //swiftlint:disable all
-         let weatherURL: String = "https://api.openweathermadp.org/data/2.5/weather?appid=22b9e2940a9d8aa928e03d767d262547&units=metric&lat=\(lat)&lon=\(lon)"
+         let weatherURL: String = "https://api.openweathermap.org/data/2.5/weather?appid=22b9e2940a9d8aa928e03d767d262547&units=metric&lat=\(lat)&lon=\(lon)"
         //swiftlint:enable all
         if let url = URL(string: weatherURL) {
             URLSession.shared.dataTask(with: url) { data, _, error in
@@ -39,7 +39,7 @@ struct WeatherService {
         let weatherURL: String = "https://api.openweathermap.org/data/2.5/onecall?appid=22b9e2940a9d8aa928e03d767d262547&units=metric&lat=\(lat)&lon=\(lon)"
         //swiftlint:enable all
         if let url = URL(string: weatherURL) {
-            URLSession.shared.dataTask(with: url) { data, res, error in
+            URLSession.shared.dataTask(with: url) { data, _, error in
                 if let error = error {
                     completion?(.failure(error))
                 } else {

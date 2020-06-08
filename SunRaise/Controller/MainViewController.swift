@@ -218,23 +218,25 @@ class MainViewController: UIViewController,
             }
         } else {
             if (dailyWeather.hourly?.indices.contains(indexPath.item+1)) ?? false {
-//                if dateFormater.string(
-//                    from: (dailyWeather.hourly?[indexPath.item].dt!)!) == dateFormater.string(
-//                        from: (weather.sunrise)!) && dateFormater.string(
-//                            from: (dailyWeather.hourly?[indexPath.item+1].dt!)!) > dateFormater.string(
-//                                from: (weather.sunrise)!) {
-//                    sunCell.timeLabel.text = dateFormaterWithMinutes.string(from: (weather.sunrise)!)
-//                    sunCell.iconImageView.image = UIImage(named: "sunraise")
-//                    return sunCell
-//                } else if dateFormater.string(
-//                    from: (dailyWeather.hourly?[indexPath.item].dt!)!) <= dateFormater.string(
-//                        from: (weather.sunset)!) && dateFormater.string(
-//                            from: (dailyWeather.hourly?[indexPath.item+1].dt!)!) > dateFormater.string(
-//                                from: (weather.sunset)!) {
-//                    sunCell.timeLabel.text = dateFormaterWithMinutes.string(from: (weather.sunset)!)
-//                    sunCell.iconImageView.image = UIImage(named: "sunset")
-//                    return sunCell
-//                }
+                if let rise = weather.sunrise, let set = weather.sunset {
+                    if dateFormater.string(
+                        from: (dailyWeather.hourly?[indexPath.item].dt!)!) == dateFormater.string(
+                            from: (rise)) && dateFormater.string(
+                                from: (dailyWeather.hourly?[indexPath.item+1].dt!)!) > dateFormater.string(
+                                    from: (rise)) {
+                        sunCell.timeLabel.text = dateFormaterWithMinutes.string(from: (weather.sunrise)!)
+                        sunCell.iconImageView.image = UIImage(named: "sunraise")
+                        return sunCell
+                    } else if dateFormater.string(
+                        from: (dailyWeather.hourly?[indexPath.item].dt!)!) <= dateFormater.string(
+                            from: (set)) && dateFormater.string(
+                                from: (dailyWeather.hourly?[indexPath.item+1].dt!)!) > dateFormater.string(
+                                    from: (set)) {
+                        sunCell.timeLabel.text = dateFormaterWithMinutes.string(from: (weather.sunset)!)
+                        sunCell.iconImageView.image = UIImage(named: "sunset")
+                        return sunCell
+                    }
+                }
             }
         }
         if let hourWeather = dailyWeather.hourly {
