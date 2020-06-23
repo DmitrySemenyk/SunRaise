@@ -12,12 +12,24 @@ typealias LoadSuccesfullHourly = (Result<HourlyAndDailyModel, Error>) -> Void
 typealias LoadError = (HTTPURLResponse) -> Void
 
 struct WeatherService {
-    static let sharedInstance = WeatherService()
+    let apiKey = "22b9e2940a9d8aa928e03d767d262547"
+    let units = "metric"
+    static var sharedInstance = WeatherService()
     func getDailyJSON(lat: String, lon: String, completion: LoadSuccesfullWeather?) {
-        //swiftlint:disable all
-         let weatherURL: String = "https://api.openweathermadp.org/data/2.5/weather?appid=22b9e2940a9d8aa928e03d767d262547&units=metric&lat=\(lat)&lon=\(lon)"
-        //swiftlint:enable all
-        if let url = URL(string: weatherURL) {
+        var urlComponents = URLComponents(string: "https://api.openweathermap.org/data/2.5/weather?")
+        var urlQueryItem = [URLQueryItem]()
+        let param = [
+            "appid": apiKey,
+            "units": units,
+            "lat": lat,
+            "lon": lon
+        ]
+        for (key, item) in param {
+            urlQueryItem.append(URLQueryItem(name: key, value: item))
+        }
+        urlComponents?.queryItems = urlQueryItem
+        if let url = urlComponents?.url {
+            print(url.absoluteString)
             URLSession.shared.dataTask(with: url) { data, _, error in
                 if let err = error {
                     print("Error")
@@ -35,11 +47,20 @@ struct WeatherService {
         }
     }
     func getHourlyJSON(lat: String, lon: String, completion: LoadSuccesfullHourly?) {
-        //swiftlint:disable all
-        let weatherURL: String = "https://api.openweathermap.org/data/2.5/onecall?appid=22b9e2940a9d8aa928e03d767d262547&units=metric&lat=\(lat)&lon=\(lon)"
-        //swiftlint:enable all
-        if let url = URL(string: weatherURL) {
-            URLSession.shared.dataTask(with: url) { data, res, error in
+        var urlComponents = URLComponents(string: "https://api.openweathermap.org/data/2.5/onecall?")
+        var urlQueryItem = [URLQueryItem]()
+        let param = [
+            "appid": apiKey,
+            "units": units,
+            "lat": lat,
+            "lon": lon
+        ]
+        for (key, item) in param {
+            urlQueryItem.append(URLQueryItem(name: key, value: item))
+        }
+        urlComponents?.queryItems = urlQueryItem
+        if let url = urlComponents?.url {
+            URLSession.shared.dataTask(with: url) { data, _, error in
                 if let error = error {
                     completion?(.failure(error))
                 } else {
